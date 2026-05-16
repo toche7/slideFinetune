@@ -1,0 +1,15 @@
+/* @theme mahidol-purple */
+/* Purple variant — suited for academic research, social sciences, humanities */
+
+@import 'mahidol';
+
+:root {
+  --color-heading: #3b0764;
+  --color-accent: #7c3aed;
+  --color-accent2: #a21caf;
+  --color-highlight: #f3e8ff;
+  --color-subtitle: #d8b4fe;
+  --color-tag-border: #e9d5ff;
+  --gradient-lead: linear-gradient(145deg, #3b0764 0%, #6d28d9 45%, #7e22ce 100%);
+  --gradient-divider: linear-gradient(135deg, #3b0764 0%, #7c3aed 100%);
+}

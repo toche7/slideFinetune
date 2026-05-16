@@ -1,0 +1,15 @@
+/* @theme mahidol-green */
+/* Green variant — suited for health, environment, public health content */
+
+@import 'mahidol';
+
+:root {
+  --color-heading: #14532d;
+  --color-accent: #16a34a;
+  --color-accent2: #0d9488;
+  --color-highlight: #dcfce7;
+  --color-subtitle: #86efac;
+  --color-tag-border: #bbf7d0;
+  --gradient-lead: linear-gradient(145deg, #14532d 0%, #15803d 45%, #0f766e 100%);
+  --gradient-divider: linear-gradient(135deg, #14532d 0%, #16a34a 100%);
+}

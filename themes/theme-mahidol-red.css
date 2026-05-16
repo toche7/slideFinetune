@@ -1,0 +1,15 @@
+/* @theme mahidol-red */
+/* Red/crimson variant — suited for engineering, science, technology */
+
+@import 'mahidol';
+
+:root {
+  --color-heading: #7f1d1d;
+  --color-accent: #dc2626;
+  --color-accent2: #ea580c;
+  --color-highlight: #fee2e2;
+  --color-subtitle: #fca5a5;
+  --color-tag-border: #fecaca;
+  --gradient-lead: linear-gradient(145deg, #7f1d1d 0%, #991b1b 45%, #9a3412 100%);
+  --gradient-divider: linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%);
+}

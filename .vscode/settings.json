@@ -1,0 +1,8 @@
+{
+  "markdown.marp.themes": [
+    "./themes/theme-mahidol.css",
+    "./themes/theme-mahidol-green.css",
+    "./themes/theme-mahidol-purple.css",
+    "./themes/theme-mahidol-red.css"
+  ]
+}
