@@ -528,6 +528,8 @@ print(f"Train: {len(train_data)} | Eval: {len(eval_data)}")
 ## ส่วนที่ 3
 # ลงมือทำจริงบน Colab
 
+Link Colab : https://github.com/toche7/AI_ITM/blob/main/LabFinetune.ipynb
+
 ⏱ 75 นาที (หัวใจหลัก)
 
 ---
@@ -634,6 +636,58 @@ model = FastLanguageModel.get_peft_model(
 | `r = 16` | ~1% | **⭐ ค่าเริ่มต้นแนะนำ** |
 | `r = 32` | ~2% | Dataset ใหญ่ (> 2,000), task ซับซ้อน |
 | `r = 64` | ~4% | Fine-tune style การเขียนเชิงลึก |
+
+---
+## Dataset ที่ใช้ใน Workshop นี้: Alpaca
+
+### Alpaca คืออะไร?
+
+**Alpaca** คือ dataset สำหรับ instruction-following ที่สร้างโดย **Stanford University (2023)**
+
+- สร้างจาก **GPT-3.5 (text-davinci-003)** โดยใช้เทคนิค Self-Instruct — ให้ LLM สร้าง instruction ตัวเอง
+- ต้นฉบับมี **52,000 ตัวอย่าง** ครอบคลุม task ทั่วไป เช่น อธิบาย, แปล, สรุป, เขียนโค้ด
+- **`yahma/alpaca-cleaned`** คือ version ที่ชุมชนช่วยกัน clean — ลบข้อมูลที่มีคุณภาพต่ำออก
+
+---
+## ทำไม Workshop นี้ถึงเลือก Alpaca?
+
+| เหตุผล | รายละเอียด |
+|--------|-----------|
+| **ฟรีและเปิดสาธารณะ** | ไม่ต้องสมัครหรือขอ permission |
+| **โหลดได้เลย 1 บรรทัด** | `load_dataset("yahma/alpaca-cleaned")` |
+| **Format มาตรฐาน** | ใช้ได้กับเกือบทุก fine-tuning framework |
+| **ขนาดพอดี** | 500 ตัวอย่าง เทรนบน T4 ได้ใน ~30 นาที |
+
+---
+## ทำความรู้จัก Dataset: Alpaca Format
+
+### `yahma/alpaca-cleaned` มีโครงสร้าง 3 field
+
+```python
+dataset = load_dataset("yahma/alpaca-cleaned", split="train[:500]")
+print(dataset[0])
+```
+
+```json
+{
+  "instruction": "Give three tips for staying healthy.",
+  "input":       "",
+  "output":      "1. Eat a balanced diet...\n2. Exercise regularly...\n3. Get enough sleep..."
+}
+```
+
+---
+## ทำความรู้จัก Dataset: Alpaca Format
+### ความหมายของแต่ละ field
+
+| Field | ความหมาย | ว่างได้ไหม |
+|-------|---------|-----------|
+| `instruction` | คำสั่ง / คำถามที่ให้โมเดลทำ | ❌ ต้องมีเสมอ |
+| `input` | บริบทเพิ่มเติม เช่น ข้อความที่ให้แปล | ✅ ว่างได้ |
+| `output` | คำตอบที่ถูกต้อง — โมเดลจะ **เรียนรู้ส่วนนี้** | ❌ ต้องมีเสมอ |
+
+> เมื่อ `input` ว่าง → ส่งแค่ `instruction` ให้โมเดล  
+> เมื่อ `input` มีค่า → รวมเป็น `instruction\n\ninput`
 
 ---
 <!-- _class: dense -->
