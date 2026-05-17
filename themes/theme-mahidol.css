@@ -33,7 +33,7 @@ section {
   position: relative;
   line-height: 1.75;
   font-size: 25px;
-  padding: 60px 64px 56px 64px;
+  padding: 44px 64px 56px 64px;
 }
 
 /* ─── Headings ──────────────────────────────────── */
@@ -66,6 +66,11 @@ h2 {
 /* :not(.divider) prevents adding 108px margin between the two h2s on divider slides */
 section:not(.divider) h2 + * {
   margin-top: 86px;
+}
+
+/* tighter gap when h2 is followed directly by a div (e.g. .columns) */
+section:not(.divider) h2 + div {
+  margin-top: 80px;
 }
 
 h3 {
@@ -165,6 +170,7 @@ pre {
   border-radius: 8px;
   padding: 5px 10px;
   overflow-x: auto;
+  margin-top: 0;
 }
 
 pre code {
@@ -179,6 +185,8 @@ pre code {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
+  margin-top: 0;
+  align-items: start;
 }
 
 .center {
@@ -370,4 +378,18 @@ section.dense h2 {
 section.dense h3 {
   font-size: 22px;
   margin-bottom: 0.2em;
+}
+
+/* ─── Utility: Image edge style ──────────────────────────────────── */
+/* Usage:                                                             */
+/*   <div class="img-edge-wrap">                                      */
+/*     <img src="..." class="img-edge">                               */
+/*   </div>                                                           */
+img.img-edge {
+  border: 1.5px solid #bbb;
+  border-radius: 4px;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.18);
+}
+.img-edge-wrap {
+  padding-right: 40px;
 }

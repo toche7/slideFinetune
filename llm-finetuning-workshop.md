@@ -3,22 +3,24 @@ marp: true
 theme: mahidol
 paginate: true
 size: 16:9
-footer: 'Master LLM Fine-tuning in 3 Hours'
+footer: 'LLM Fine-tuning | EGIT520'
 ---
 
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
+![bg right:50%](fig/cover.png)
+
 <style scoped>
-img { position: absolute; top: 36px; right: 64px; width: 120px; height: 120px; object-fit: contain; }
+img[alt="Mahidol University"] { position: absolute; top: 40px; left: 70px; width: 120px; height: 120px; object-fit: contain; }
 </style>
 
 <img src="fig/logos/mahidol.svg" alt="Mahidol University">
 
-# Master LLM Fine-tuning
+# LLM Fine-tuning
 ### EGIT520 Data Science for Business 
 ผศ.ดร. ทวีศักดิ์ สมานชื่น
-ITM | คณะวิศวกรรมศาสตร์ | มหาวิทยาลับมหิดล
+ITM | คณะวิศวกรรมศาสตร์ | มหาวิทยาลัยมหิดล
 May 2026
 
 
@@ -27,28 +29,28 @@ May 2026
 
 <!-- _paginate: false -->
 
-## 📋 เนื้อหาวันนี้
+## 📋 เนื้อหาในวันนี้
 
 | ส่วน | หัวข้อ | เวลา |
 |------|--------|------|
-| **1** | ปูพื้นฐานและความเข้าใจ | 45 นาที |
+| **1** | ปูพื้นฐานและทำความเข้าใจ | 45 นาที |
 | **2** | วิศวกรรมข้อมูล | 30 นาที |
 | **3** | ลงมือทำจริงบน Colab | 75 นาที |
 | **4** | การประเมินผลและการนำไปใช้ | 30 นาที |
 
-> **เป้าหมาย:** มีโมเดลที่ใช้งานได้จริงภายใน 3 ชั่วโมง 🚀
+> **เป้าหมาย:** ให้ทุกคนมีโมเดลที่ใช้งานได้จริงภายใน 3 ชั่วโมง 🚀
 
 ---
 
 ## 🛠️ สิ่งที่ต้องเตรียม (Prerequisites)
 
-### ก่อนมาเข้า Workshop ต้องมีสิ่งเหล่านี้พร้อม
+### ก่อนเข้าเวิร์กช็อป ควรเตรียมสิ่งต่อไปนี้ให้พร้อม
 
-- **Google Account** — เปิด [colab.research.google.com](https://colab.research.google.com) และเปลี่ยน Runtime เป็น **GPU (T4)**
+- **Google Account** — เปิด [colab.research.google.com](https://colab.research.google.com) แล้วตั้ง Runtime เป็น **GPU (T4)**
   - ไปที่ Runtime → Change runtime type → Hardware accelerator → **T4 GPU**
-- **Hugging Face Account + Token** — สมัครที่ [huggingface.co](https://huggingface.co) แล้วสร้าง token ที่ Settings → Access Tokens (เลือก **Write** permission)
-- **ชุดข้อมูลตัวอย่าง** — ไฟล์ `.jsonl` ขนาด 50–100 ตัวอย่าง
-  - ถ้ายังไม่มี จะใช้ dataset สาธารณะจาก Hugging Face ได้เลย เช่น `yahma/alpaca-cleaned`
+- **Hugging Face Account + Token** — สมัครที่ [huggingface.co](https://huggingface.co) แล้วสร้าง token ที่ Settings → Access Tokens (เลือกสิทธิ์ **Write**)
+- **ชุดข้อมูลตัวอย่าง** — ไฟล์ `.jsonl` ประมาณ 50–100 ตัวอย่าง
+    - ถ้ายังไม่มี สามารถใช้ dataset สาธารณะจาก Hugging Face ได้เลย เช่น `yahma/alpaca-cleaned`
 
 ---
 
@@ -58,7 +60,7 @@ May 2026
 ## ส่วนที่ 1
 # ปูพื้นฐานและความเข้าใจ
 
-⏱ 45 นาที
+
 
 ---
 
@@ -66,14 +68,14 @@ May 2026
 
 | วิธีการ | ปรับอะไร | ต้องการอะไร | เหมาะสำหรับ |
 |---------|---------|------------|------------|
-| **Prompt Engineering** | ไม่ปรับน้ำหนักเลย | แค่ prompt | ทดสอบเร็ว, ต้นทุนต่ำ |
+| **Prompt Engineering** | ไม่ปรับน้ำหนักเลย | มีแค่ prompt | ทดสอบเร็ว, ต้นทุนต่ำ |
 | **RAG** | ไม่ปรับน้ำหนัก + เพิ่ม retrieval | Vector DB + documents | ข้อมูลเปลี่ยนบ่อย |
-| **Fine-tuning** | ปรับน้ำหนักโมเดล | Dataset + GPU | พฤติกรรมคงที่, style เฉพาะ |
+| **Fine-tuning** | ปรับน้ำหนักโมเดล | Dataset + GPU | ต้องการพฤติกรรมคงที่หรือสไตล์เฉพาะ |
 
 ### คำถามสำคัญก่อนตัดสินใจ Fine-tune
 
 > *"ปัญหานี้แก้ได้ด้วย Prompt Engineering ก่อนไหม?"*
-> ถ้าใช่ → ลองก่อน, ถ้าไม่พอ → Fine-tune
+> ถ้าได้ ให้ลองก่อน ถ้ายังไม่พอค่อยไป Fine-tune
 
 ---
 
@@ -83,21 +85,21 @@ May 2026
 
 ### ✅ ควรใช้ Fine-tuning เมื่อ
 
-- ต้องการให้โมเดลมี **โทนเสียง / สไตล์** เฉพาะที่ prompt ควบคุมไม่ได้
-  - เช่น ตอบภาษาไทยสุภาพแบบพนักงานบริษัทเสมอ
+- ต้องการให้โมเดลมี **โทนเสียงหรือสไตล์** เฉพาะที่ prompt ควบคุมไม่ได้
+    - เช่น ตอบภาษาไทยสุภาพแบบพนักงานบริษัททุกครั้ง
 - ต้องการ **ความสม่ำเสมอ 100%** ในโครงสร้างคำตอบ
-  - เช่น ตอบเป็น JSON เสมอ ไม่มีข้อยกเว้น
-- โมเดลต้องเรียนรู้ **ทักษะใหม่** หรือ terminology เฉพาะวงการ
-  - เช่น คำศัพท์ทางการแพทย์, กฎหมายไทย, คำสั่ง SQL เฉพาะระบบ
+    - เช่น ตอบเป็น JSON ทุกครั้งโดยไม่มีข้อยกเว้น
+- โมเดลต้องเรียนรู้ **ทักษะใหม่** หรือคำเฉพาะทางในแต่ละวงการ
+    - เช่น คำศัพท์ทางการแพทย์ กฎหมายไทย หรือคำสั่ง SQL เฉพาะระบบ
 </div>
 
 <div>
 
 ### ❌ ไม่ควรใช้เมื่อ
 
-- ต้องการเพิ่ม **ความรู้ใหม่** (ใช้ RAG แทน)
-- มีข้อมูลฝึกน้อยกว่า **50 ตัวอย่าง** (ได้ผลน้อย)
-- ต้องการปรับจูนบ่อยครั้งตาม real-time data
+- ต้องการเพิ่ม **ความรู้ใหม่** (ควรใช้ RAG แทน)
+- มีข้อมูลฝึกน้อยกว่า **50 ตัวอย่าง** (มักได้ผลไม่คุ้ม)
+- ต้องการปรับจูนบ่อยตาม real-time data
 </div>
 </div>
 
@@ -115,7 +117,7 @@ May 2026
 | **SQL Generator** | คำอธิบายภาษาไทย | SQL ที่ตรงกับ schema ของระบบ |
 | **Report Writer** | ข้อมูลดิบ | รายงานตามรูปแบบองค์กร |
 
-> Fine-tuning ทำให้โมเดล "รู้จัก" บริบทขององค์กรคุณโดยไม่ต้องส่ง context ทุกครั้ง
+> Fine-tuning ช่วยให้โมเดล "คุ้น" กับบริบทขององค์กรคุณ โดยไม่ต้องส่ง context ทุกครั้ง
 
 ---
 
@@ -160,7 +162,7 @@ $$\mathcal{L} = -\frac{1}{|y|} \sum_{t=1}^{|y|} \log P(y_t \mid y_{<t}, x)$$
 </div>
 <div>
 
-### การแปลความหมาย Loss
+### การแปลความหมายของ Loss
 
 | ค่า Loss | ความหมาย |
 |----------|----------|
@@ -178,7 +180,7 @@ $$\mathcal{L} = -\frac{1}{|y|} \sum_{t=1}^{|y|} \log P(y_t \mid y_{<t}, x)$$
 > เทคนิคที่ **fine-tune โมเดลขนาดใหญ่โดยอัปเดตพารามิเตอร์เพียงบางส่วน** แทนที่จะแก้ไขน้ำหนักทั้งหมด
 
 - **แช่แข็ง (Freeze)** น้ำหนักเดิมของโมเดลทั้งหมดไว้
-- เพิ่ม / ปรับเฉพาะ **parameter ชุดเล็กๆ** ที่เพิ่มเข้าไปใหม่
+- เพิ่มหรือปรับเฉพาะ **parameter ชุดเล็ก ๆ** ที่เติมเข้าไปใหม่
 - ลดพารามิเตอร์ที่ต้องเทรนจาก 100% เหลือ **< 1%**
 
 ---
@@ -193,7 +195,7 @@ $$\mathcal{L} = -\frac{1}{|y|} \sum_{t=1}^{|y|} \log P(y_t \mid y_{<t}, x)$$
 | **Adapter** | แทรก small module ระหว่าง layers | ⭐⭐⭐ |
 | **IA³** | scale activation ด้วย learned vectors | ⭐⭐ |
 
-> ใน Workshop นี้เราจะใช้ **LoRA + QLoRA** ซึ่งเป็นที่นิยมมากที่สุดในปัจจุบัน
+> ในเวิร์กช็อปนี้เราจะใช้ **LoRA + QLoRA** ซึ่งเป็นวิธีที่นิยมมากที่สุดในปัจจุบัน
 
 ---
 
@@ -249,7 +251,7 @@ $$\text{QLoRA} = \underbrace{\text{Quantize } W \rightarrow \hat{W}_{\text{4-bit
 | INT8 | 8 | 256 ค่า | Quantization เบื้องต้น |
 | **NF4** | **4** | **16 ค่า (กระจายตาม Normal dist.)** | **QLoRA base weights** |
 
-> NF4 กระจายค่าทั้ง 16 ให้ตรงกับ **distribution ของ weight จริงๆ** (ซึ่งมักเป็น Normal distribution) → สูญเสียข้อมูลน้อยกว่า INT4 ปกติ
+> NF4 กระจายค่าทั้ง 16 ค่าให้สอดคล้องกับ **distribution ของ weight จริง** (ซึ่งมักเป็น Normal distribution) → สูญเสียข้อมูลน้อยกว่า INT4 ปกติ
 
 ---
 
@@ -317,12 +319,12 @@ Transformer Block
 
 | โมเดล | พารามิเตอร์ | VRAM (4-bit) | เวลาเทรน* | เหมาะสำหรับ |
 |-------|------------|-------------|----------|------------|
-| **Llama 3.2 (3B)** | 3B | ~2.5 GB | ~15 นาที | เร็วสุด, ทดสอบ idea |
-| **Mistral 7B** | 7B | ~4.5 GB | ~25 นาที | สมดุล, instruction-following ดี |
-| **Llama 3.1 (8B)** | 8B | ~5.5 GB | ~30 นาที | ⭐ **แนะนำ** สำหรับ workshop |
+| **Llama 3.2 (3B)** | 3B | ~2.5 GB | ~15 นาที | เร็วสุด, ทดสอบแนวคิด |
+| **Mistral 7B** | 7B | ~4.5 GB | ~25 นาที | สมดุล, ทำตามคำสั่งได้ดี |
+| **Llama 3.1 (8B)** | 8B | ~5.5 GB | ~30 นาที | ⭐ **แนะนำ** สำหรับเวิร์กช็อป |
 | **Llama 3.1 (70B)** | 70B | ~42 GB | ❌ T4 ไม่พอ | ต้องการ A100 |
 
-*เวลาเทรนโดยประมาณสำหรับ 500 ตัวอย่าง, 3 epochs บน T4
+*เวลาเทรนโดยประมาณสำหรับ 500 ตัวอย่าง 3 epochs บน T4
 
 ---
 ## ทำไมต้องใช้ Unsloth?
@@ -331,7 +333,7 @@ Transformer Block
 
 - **เร็วขึ้น 2 เท่า** — เทียบกับการใช้ `transformers` + `peft` แบบปกติโดยตรง
 - **ใช้ VRAM น้อยลง 70%** — เพราะเขียน kernel ควบคุม GPU โดยตรง ไม่ผ่าน layer กลางของ PyTorch
-- **รองรับโมเดลยอดนิยมครบ** — Llama, Mistral, Gemma, Qwen ทุกตระกูล
+- **รองรับโมเดลยอดนิยมครบ** — Llama, Mistral, Gemma และ Qwen ทุกตระกูล
 
 ---
 
@@ -341,7 +343,7 @@ Transformer Block
 ## ส่วนที่ 2
 # วิศวกรรมข้อมูล
 
-⏱ 30 นาที
+
 
 ---
 
@@ -352,18 +354,18 @@ Transformer Block
 
 ### Less Is More Alignment (Zhou et al., 2023)
 
-> งานวิจัยจาก Meta พบว่า: ข้อมูลคุณภาพสูงเพียง **1,000 ชุด** ให้ผลเทียบเท่า GPT-4 ในหลาย task
+> งานวิจัยจาก Meta พบว่า ข้อมูลคุณภาพสูงเพียง **1,000 ชุด** ให้ผลเทียบเท่า GPT-4 ในหลาย task
 
-- ❌ ข้อมูล 1,000,000 ชุด แต่ **คุณภาพต่ำ** → โมเดลตอบเลอะเทอะ
+- ❌ ข้อมูล 1,000,000 ชุด แต่ **คุณภาพต่ำ** → โมเดลตอบไม่เป็นเรื่อง
 - ✅ ข้อมูล **500–1,000 ชุด** ที่คัดมาอย่างดี → โมเดลตอบได้ดีมาก
 </div>
 <div>
 
-### 5 เกณฑ์ข้อมูลที่ดี
+### 5 เกณฑ์ของข้อมูลที่ดี
 
 1. **ถูกต้อง (Accurate)** — คำตอบไม่มีข้อผิดพลาดเชิงข้อเท็จจริง
-2. **หลากหลาย (Diverse)** — ครอบคลุมหลาย task, หลายความยาก
-3. **สม่ำเสมอ (Consistent)** — รูปแบบและสไตล์เดียวกันตลอด
+2. **หลากหลาย (Diverse)** — ครอบคลุมหลาย task และหลายระดับความยาก
+3. **สม่ำเสมอ (Consistent)** — รูปแบบและสไตล์ไปในทิศทางเดียวกันตลอด
 4. **ไม่ซ้ำ (Unique)** — หลีกเลี่ยงข้อมูลซ้ำกันมากกว่า 90%
 5. **ชัดเจน (Clear)** — คำถามมีความหมายเดียว ไม่กำกวม
 </div>
@@ -381,19 +383,19 @@ Transformer Block
 
 ### 1. Human-written (คุณภาพสูงสุด)
 - ผู้เชี่ยวชาญเขียนคู่ (Prompt, Response) เอง
-- ใช้กับงาน critical เช่น การแพทย์, กฎหมาย
+- ใช้กับงานสำคัญ เช่น การแพทย์และกฎหมาย
 - ต้นทุนสูง: ~$5–20 ต่อตัวอย่าง
 
 ### 2. LLM-generated + Human-verified (สมดุล)
-- ใช้ GPT-4 สร้างคำตอบ แล้วให้มนุษย์ตรวจ
-- ลดต้นทุนได้ 80% — นิยมมากที่สุด
+- ใช้ GPT-4 สร้างคำตอบ แล้วให้มนุษย์ตรวจทาน
+- ลดต้นทุนได้ 80% — เป็นวิธีที่นิยมมากที่สุด
 - เรียกว่า **"Synthetic Data"** generation
 </div>
 <div>
 
 ### 3. Curated from public datasets
 - ใช้ข้อมูลสาธารณะ เช่น `alpaca`, `dolly`, `OpenHermes`
-- ฟรี แต่ต้องกรองให้ตรง domain
+- ฟรี แต่ต้องคัดกรองให้ตรงกับโดเมนงาน
 </div>
 </div>
 
@@ -427,7 +429,7 @@ def generate_qa_pair(topic: str) -> dict:
 </div>
 <div>
 
-> สร้าง 500 คู่ด้วย GPT-4o ค่าใช้จ่ายประมาณ **$2–5** เท่านั้น
+> สร้าง 500 คู่ด้วย GPT-4o ใช้ค่าใช้จ่ายประมาณ **$2–5** เท่านั้น
 </div>
 </div>
 
@@ -465,7 +467,7 @@ def generate_qa_pair(topic: str) -> dict:
 
 ---
 
-## Chat Templates: รูปแบบจริงๆ ที่โมเดลเห็น
+## Chat Templates: รูปแบบจริงที่โมเดลเห็น
 
 ### Llama-3 Format
 
@@ -480,7 +482,7 @@ def generate_qa_pair(topic: str) -> dict:
 ```
 
 ---
-## Chat Templates: รูปแบบจริงๆ ที่โมเดลเห็น (ต่อ)
+## Chat Templates: รูปแบบจริงที่โมเดลเห็น (ต่อ)
 ### ChatML Format (Qwen, OpenHermes)
 
 ```
@@ -492,7 +494,7 @@ def generate_qa_pair(topic: str) -> dict:
 สวัสดีครับ<|im_end|>
 ```
 
-> Unsloth + TRL จัดการ template ให้อัตโนมัติตาม tokenizer ของโมเดล ✅
+> Unsloth + TRL จะจัดการ template ให้อัตโนมัติตาม tokenizer ของโมเดล ✅
 
 ---
 
@@ -504,7 +506,7 @@ def generate_qa_pair(topic: str) -> dict:
 from datasets import load_dataset
 # จากไฟล์ local
 dataset = load_dataset("json", data_files="my_data.jsonl", split="train")
-# จาก Hugging Face Hub (สำหรับ workshop นี้)
+# จาก Hugging Face Hub (สำหรับเวิร์กช็อปนี้)
 dataset = load_dataset("yahma/alpaca-cleaned", split="train[:500]")
 print(f"จำนวนตัวอย่าง: {len(dataset)}")
 print(dataset[0])  # ดูตัวอย่างแรก
@@ -530,7 +532,7 @@ print(f"Train: {len(train_data)} | Eval: {len(eval_data)}")
 
 Link Colab : https://github.com/toche7/AI_ITM/blob/main/LabFinetune.ipynb
 
-⏱ 75 นาที (หัวใจหลัก)
+
 
 ---
 
@@ -635,33 +637,33 @@ model = FastLanguageModel.get_peft_model(
 | `r = 8` | ~0.5% | Dataset เล็ก (< 200), task ง่าย |
 | `r = 16` | ~1% | **⭐ ค่าเริ่มต้นแนะนำ** |
 | `r = 32` | ~2% | Dataset ใหญ่ (> 2,000), task ซับซ้อน |
-| `r = 64` | ~4% | Fine-tune style การเขียนเชิงลึก |
+| `r = 64` | ~4% | Fine-tune สไตล์การเขียนเชิงลึก |
 
 ---
-## Dataset ที่ใช้ใน Workshop นี้: Alpaca
+## Dataset ที่ใช้ในเวิร์กช็อปนี้: Alpaca
 
 ### Alpaca คืออะไร?
 
-**Alpaca** คือ dataset สำหรับ instruction-following ที่สร้างโดย **Stanford University (2023)**
+**Alpaca** คือชุดข้อมูลสำหรับสอนโมเดลให้ทำตามคำสั่ง ที่สร้างโดย **Stanford University (2023)**
 
-- สร้างจาก **GPT-3.5 (text-davinci-003)** โดยใช้เทคนิค Self-Instruct — ให้ LLM สร้าง instruction ตัวเอง
-- ต้นฉบับมี **52,000 ตัวอย่าง** ครอบคลุม task ทั่วไป เช่น อธิบาย, แปล, สรุป, เขียนโค้ด
-- **`yahma/alpaca-cleaned`** คือ version ที่ชุมชนช่วยกัน clean — ลบข้อมูลที่มีคุณภาพต่ำออก
+- สร้างจาก **GPT-3.5 (text-davinci-003)** โดยใช้เทคนิค Self-Instruct — ให้ LLM สร้าง instruction ขึ้นมาด้วยตัวเอง
+- ต้นฉบับมี **52,000 ตัวอย่าง** ครอบคลุมงานทั่วไป เช่น อธิบาย แปล สรุป และเขียนโค้ด
+- **`yahma/alpaca-cleaned`** คือเวอร์ชันที่ชุมชนช่วยกัน clean — ตัดข้อมูลที่มีคุณภาพต่ำออก
 
 ---
-## ทำไม Workshop นี้ถึงเลือก Alpaca?
+## ทำไมเวิร์กช็อปนี้ถึงเลือก Alpaca?
 
 | เหตุผล | รายละเอียด |
 |--------|-----------|
-| **ฟรีและเปิดสาธารณะ** | ไม่ต้องสมัครหรือขอ permission |
+| **ฟรีและเปิดสาธารณะ** | ไม่ต้องสมัครหรือขอสิทธิ์ใช้งาน |
 | **โหลดได้เลย 1 บรรทัด** | `load_dataset("yahma/alpaca-cleaned")` |
-| **Format มาตรฐาน** | ใช้ได้กับเกือบทุก fine-tuning framework |
+| **รูปแบบมาตรฐาน** | ใช้ได้กับเกือบทุกเฟรมเวิร์กสำหรับ fine-tuning |
 | **ขนาดพอดี** | 500 ตัวอย่าง เทรนบน T4 ได้ใน ~30 นาที |
 
 ---
-## ทำความรู้จัก Dataset: Alpaca Format
+## ทำความรู้จักชุดข้อมูล Alpaca
 
-### `yahma/alpaca-cleaned` มีโครงสร้าง 3 field
+### `yahma/alpaca-cleaned` มีโครงสร้าง 3 ฟิลด์
 
 ```python
 dataset = load_dataset("yahma/alpaca-cleaned", split="train[:500]")
@@ -677,10 +679,10 @@ print(dataset[0])
 ```
 
 ---
-## ทำความรู้จัก Dataset: Alpaca Format
-### ความหมายของแต่ละ field
+## ทำความรู้จักชุดข้อมูล Alpaca
+### ความหมายของแต่ละฟิลด์
 
-| Field | ความหมาย | ว่างได้ไหม |
+| ฟิลด์ | ความหมาย | ว่างได้ไหม |
 |-------|---------|-----------|
 | `instruction` | คำสั่ง / คำถามที่ให้โมเดลทำ | ❌ ต้องมีเสมอ |
 | `input` | บริบทเพิ่มเติม เช่น ข้อความที่ให้แปล | ✅ ว่างได้ |
@@ -698,11 +700,11 @@ print(dataset[0])
 from datasets import load_dataset
 from unsloth.chat_templates import get_chat_template
 
-# โหลด dataset (alpaca format: instruction / input / output)
+# โหลด dataset (รูปแบบ Alpaca: instruction / input / output)
 dataset  = load_dataset("yahma/alpaca-cleaned", split="train[:500]")
 tokenizer = get_chat_template(tokenizer, chat_template="llama-3")
 def format_alpaca(examples):
-    """แปลง Alpaca format → chat messages → formatted text"""
+    """แปลงรูปแบบ Alpaca → chat messages → formatted text"""
     texts = []
     for inst, inp, out in zip(examples["instruction"],
                               examples["input"],
@@ -870,7 +872,7 @@ print(tokenizer.decode(outputs[0][len(inputs[0]):]))
 ## ส่วนที่ 4
 # การประเมินผลและการนำไปใช้
 
-⏱ 30 นาที
+
 
 ---
 <!-- _class: dense -->
@@ -975,10 +977,10 @@ merged = model.merge_and_unload()  # รวม adapter เข้ากับ bas
 
 ## การส่งออก — Option B: GGUF สำหรับ Ollama
 
-### แปลงเป็นไฟล์ GGUF เพื่อ deploy บนเครื่องท้องถิ่น
+### แปลงเป็นไฟล์ GGUF เพื่อ deploy บน local
 
 ```python
-# บันทึกเป็น GGUF (q4_k_m ≈ คุณภาพดี, ขนาดสมเหตุสมผล)
+# บันทึกเป็น GGUF (q4_k_m ≈ คุณภาพดี, ขนาดสมเหตุสมผล)ด
 model.save_pretrained_gguf(
     "my_model_gguf",
     tokenizer,
@@ -1039,16 +1041,18 @@ Training Data = Domain-specific (90%) + General instructions (10%)
 
 **3. Fewer Epochs** — ไม่เกิน 3–5 รอบ สำหรับ dataset ขนาดเล็ก
 
-### ตรวจสอบหลัง Fine-tune
+---
+
+## ตรวจสอบหลัง Fine-tune
 
 ```python
-# ทดสอบ capability ที่ไม่ใช่ domain หลัก
+# ทดสอบความสามารถที่ไม่ใช่โดเมนหลัก
 test_prompts = ["เขียนโปรแกรม Hello World ใน Python",
                 "แปลประโยคนี้เป็นอังกฤษ: ฉันชอบกินข้าว"]
 ```
 
 ---
-
+<!-- _class: dense -->
 ## ตัวเลือก Deployment
 
 ### เปรียบเทียบแนวทางการนำโมเดลไปใช้งาน
@@ -1073,7 +1077,7 @@ curl http://localhost:11434/api/generate \
 
 ## สรุปและ Key Takeaways
 
-### ✅ สิ่งที่ทำได้หลังจาก Workshop นี้
+### ✅ สิ่งที่ทำได้หลังจบเวิร์กช็อปนี้
 
 | ทักษะ | รายละเอียด |
 |-------|-----------|
